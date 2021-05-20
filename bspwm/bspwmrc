@@ -1,0 +1,53 @@
+#! /bin/sh
+
+pgrep -x sxhkd > /dev/null || sxhkd &
+
+
+MON_AUX=$(xrandr --query | grep HDMI-1 | awk '{print $2}')
+CON="connected"
+
+PRINCIPAL=$(xrandr | grep primary | awk '{pirnt $1}')
+
+SECOND_MON=$(xrandr | grep connected | awk '{i++}i==2' | awk '{print $1}')
+SECOND_MON_POS="right"
+
+if [ "$MON_AUX" = "$CON" ]
+then
+    bspc monitor $(bspc query -M | sed -n 1p) -d I II III
+    bspc monitor $(bspc query -M | sed -n 2p) -d IV V VI
+
+    xrandr --output $SECOND_MON --$SECOND_MON_POS-of $PRINCIPAL
+#    bspc monitor HDMI-1 -d IV V VI
+#    bspc monitor HDMI-1 -d IV V VI
+else
+    bspc monitor -d I II III IV V VI
+fi
+
+~/.config/polybar/launch.sh
+
+
+feh --bg-scale ~/Imágenes/fondos/fondo.jpg &
+
+
+bspc config pointer_modifier mod1
+
+
+bspc config border_width         4
+bspc config window_gap           3
+
+bspc config top_padding          0
+bspc config bottom_padding       0
+
+bspc config split_ratio          0.5
+bspc config borderless_monocle   true
+bspc config gapless_monocle      true
+
+bspc config focus_follows_pointer true
+
+bspc config normal_border_color     "#81b214"
+bspc config focused_border_color     "#f21170"
+
+bspc rule -a gimp-2.10 desktop='^3' follow=on
+bspc rule -a Firefox-esr desktop='^2' follow=on
+bspc rule -a TelegramDesktop desktop='^1'
+bspc rule -a Code desktop='^4' follow=on
